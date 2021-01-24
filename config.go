@@ -1,6 +1,8 @@
 package config
 
 import (
+	"fmt"
+	"github.com/spf13/viper"
 	"os"
 	"path/filepath"
 )
@@ -14,16 +16,37 @@ func AppName()(string,string){
 	if err != nil {
 		panic(err)
 	}
-	filePath.Dir(absPath)
+	dir := filepath.Dir(absPath)
+	exeName := filepath.Base(absPath)
+	return dir,exeName
 }
 
 
-func SetConfigPath(){
-	
+func SetConfig(appname string){
+	viper.AddConfigPath(".")
+	viper.AddConfigPath(fmt.Sprintf("/etc/%s/",appname))
+	viper.AddConfigPath("$HOME/.appname")
+	viper.AddConfigPath("../configs")
+	viper.AddConfigPath("./configs")
+	viper.SetConfigName(appname)
+	viper.SetConfigType("json")
 }
 
-func ReloadConfig(){
-
+func loadConfig(cf map[string]string){
+	_,app := AppName()
+	SetConfig(app)
+	cfPath,ok := cf["config_path"]
+	if ok{
+		viper.AddConfigPath(cfPath)
+	}
+	cfType,ok :=cf["config_type"]
+	if ok {
+		viper.SetConfigType(cfType)
+	}
+	cfName,ok := cf["config_name"]
+	if ok{
+		viper.SetConfigName(cfName)
+	}
 }
 
 func Get(key string) interface{}  {
