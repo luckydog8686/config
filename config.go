@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/luckydog8686/logs"
 	"github.com/spf13/viper"
 	"os"
 	"path/filepath"
@@ -12,6 +13,7 @@ func AppName()(string,string){
 	if err != nil {
 		panic(err)
 	}
+	logs.Debug("appName:",appName)
 	absPath,err:=filepath.Abs(appName)
 	if err != nil {
 		panic(err)
@@ -47,13 +49,15 @@ func loadConfig(cf map[string]string){
 	if ok{
 		viper.SetConfigName(cfName)
 	}
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(err)
+	}
+	viper.AutomaticEnv()
 }
 
-func Get(key string) interface{}  {
-	return nil
+func Get(key string) string {
+	return viper.GetString(key)
 }
 
-func init()  {
-	
-}
 
