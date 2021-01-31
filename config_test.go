@@ -10,6 +10,6 @@ func TestAppName(t *testing.T) {
 	dir, filename := AppName()
 	t.Log(dir)
 	t.Log(filename)
-	loadConfig(nil)
+	LoadConfig(nil)
 	t.Log(viper.Get("testapp"))
 }

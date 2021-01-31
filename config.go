@@ -34,7 +34,7 @@ func SetConfig(appname string){
 	viper.SetConfigType("json")
 }
 
-func loadConfig(cf map[string]string){
+func LoadConfig(cf map[string]string){
 	_,app := AppName()
 	SetConfig(app)
 	cfPath,ok := cf["config_path"]
